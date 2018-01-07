@@ -1,53 +1,125 @@
 package com.nbuproject.Sportshistoryandrulescataloguerestapi.entities;
 
 
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 /**
  * Created by user on 10/28/2017.
  */
-
+@Entity
+@Table(uniqueConstraints={
+        @UniqueConstraint(columnNames = {"date", "homeTeamName", "awayTeamName"})
+})
 public class Game {
-    private String homeTeam;
-    private String awayTeam;
-    private Integer homeScore;
-    private Integer awayScore;
+    private String id;
+    private String date;
+    private String status;
+    private Integer matchday;
+    private String homeTeamName;
+    private String awayTeamName;
+    private Integer goalsHomeTeamFirstHalf;
+    private Integer goalsAwayTeamFirstHalf;
+    private Integer goalsHomeTeamSecondHalf;
+    private Integer goalsAwayTeamSecondHalf;
 
-    public Game(String homeTeam, String awayTeam, Integer homeScore, Integer awayScore) {
-        this.homeTeam = homeTeam;
-        this.awayTeam = awayTeam;
-        this.homeScore = homeScore;
-        this.awayScore = awayScore;
+    @Id
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name="uuid", strategy = "uuid2")
+    public String getId() {
+        return id;
     }
 
-    public String getHomeTeam() {
-        return homeTeam;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public void setHomeTeam(String homeTeam) {
-        this.homeTeam = homeTeam;
+    @Column
+    @NotNull
+    public String getDate() {
+        return date;
     }
 
-    public String getAwayTeam() {
-        return awayTeam;
+    public void setDate(String date) {
+        this.date = date;
     }
 
-    public void setAwayTeam(String awayTeam) {
-        this.awayTeam = awayTeam;
+    @Column
+    @NotNull
+    public String getStatus() {
+        return status;
     }
 
-    public Integer getHomeScore() {
-        return homeScore;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public void setHomeScore(Integer homeScore) {
-        this.homeScore = homeScore;
+    @Column
+    @NotNull
+    public Integer getMatchday() {
+        return matchday;
     }
 
-    public Integer getAwayScore() {
-        return awayScore;
+    public void setMatchday(Integer matchday) {
+        this.matchday = matchday;
     }
 
-    public void setAwayScore(Integer awayScore) {
-        this.awayScore = awayScore;
+    @Column
+    @NotNull
+    public String getHomeTeamName() {
+        return homeTeamName;
     }
+
+    public void setHomeTeamName(String homeTeamName) {
+        this.homeTeamName = homeTeamName;
+    }
+
+    @Column
+    @NotNull
+    public String getAwayTeamName() {
+        return awayTeamName;
+    }
+
+    public void setAwayTeamName(String awayTeamName) {
+        this.awayTeamName = awayTeamName;
+    }
+
+    @Column
+    public Integer getGoalsHomeTeamFirstHalf() {
+        return goalsHomeTeamFirstHalf;
+    }
+
+    public void setGoalsHomeTeamFirstHalf(Integer goalsHomeTeamFirstHalf) {
+        this.goalsHomeTeamFirstHalf = goalsHomeTeamFirstHalf;
+    }
+
+    @Column
+    public Integer getGoalsAwayTeamFirstHalf() {
+        return goalsAwayTeamFirstHalf;
+    }
+
+    public void setGoalsAwayTeamFirstHalf(Integer goalsAwayTeamFirstHalf) {
+        this.goalsAwayTeamFirstHalf = goalsAwayTeamFirstHalf;
+    }
+
+    @Column
+    public Integer getGoalsHomeTeamSecondHalf() {
+        return goalsHomeTeamSecondHalf;
+    }
+
+    public void setGoalsHomeTeamSecondHalf(Integer goalsHomeTeamSecondHalf) {
+        this.goalsHomeTeamSecondHalf = goalsHomeTeamSecondHalf;
+    }
+
+    @Column
+    public Integer getGoalsAwayTeamSecondHalf() {
+        return goalsAwayTeamSecondHalf;
+    }
+
+    public void setGoalsAwayTeamSecondHalf(Integer goalsAwayTeamSecondHalf) {
+        this.goalsAwayTeamSecondHalf = goalsAwayTeamSecondHalf;
+    }
+
 }

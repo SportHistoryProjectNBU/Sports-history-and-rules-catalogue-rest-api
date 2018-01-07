@@ -32,7 +32,7 @@ public class UserController {
         String cryptedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
         user.setPassword(cryptedPassword);
         this.userRepository.save(user);
-        user = this.userRepository.findUserByName(user.getName());
+        user = this.userRepository.findUserByName(user.getUsername());
         setSecurityHolder(user);
         response.put("id", user.getId());
         response.put("name", user.getName());
