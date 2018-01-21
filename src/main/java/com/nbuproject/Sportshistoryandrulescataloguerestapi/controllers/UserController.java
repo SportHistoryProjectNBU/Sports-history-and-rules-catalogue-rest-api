@@ -32,10 +32,11 @@ public class UserController {
         String cryptedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
         user.setPassword(cryptedPassword);
         this.userRepository.save(user);
-        user = this.userRepository.findUserByName(user.getUsername());
+        user = this.userRepository.findUserByUsername(user.getUsername());
         setSecurityHolder(user);
         response.put("id", user.getId());
         response.put("name", user.getName());
+        response.put("userName", user.getUsername());
         return ResponseEntity.ok(response);
     }
 
@@ -53,6 +54,7 @@ public class UserController {
             setSecurityHolder(checkedUser);
             response.put("id", checkedUser.getId());
             response.put("name", checkedUser.getName());
+            response.put("userName", checkedUser.getUsername());
             return ResponseEntity.ok(response);
         }
         response.put("authorization","failed");
