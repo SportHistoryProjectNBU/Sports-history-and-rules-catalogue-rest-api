@@ -85,7 +85,7 @@ public class User implements UserDetails {
     }
 
     @Override
-    @Column
+    @Column(unique = true)
     @NotNull
     public String getUsername() {
         return this.username;

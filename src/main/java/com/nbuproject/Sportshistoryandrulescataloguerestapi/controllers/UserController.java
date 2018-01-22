@@ -31,6 +31,11 @@ public class UserController {
         user.setRole(UserRole.USER);
         String cryptedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
         user.setPassword(cryptedPassword);
+        User checkUser = this.userRepository.findUserByUsername(user.getUsername());
+        if(checkUser != null) {
+            response.put("exists", "true");
+            return ResponseEntity.badRequest().body(response);
+        }
         this.userRepository.save(user);
         user = this.userRepository.findUserByUsername(user.getUsername());
         setSecurityHolder(user);
@@ -49,6 +54,9 @@ public class UserController {
     public ResponseEntity<Map<String, String>> login(@RequestBody User user) {
         Map<String, String> response = new HashMap<>();
         User checkedUser = this.userRepository.findUserByUsername(user.getUsername());
+        if(checkedUser == null ) {
+            return ResponseEntity.badRequest().body(response);
+        }
         boolean isPasswordMatching = BCrypt.checkpw(user.getPassword(), checkedUser.getPassword());
         if (isPasswordMatching) {
             setSecurityHolder(checkedUser);
