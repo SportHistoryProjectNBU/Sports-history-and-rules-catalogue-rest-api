@@ -20,6 +20,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .logout()
                 .deleteCookies("JSESSIONID")
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("https://sport-history-web-app-angular.herokuapp.com").permitAll();
+                .logoutSuccessUrl("https://sport-history-web-app-angular.herokuapp.com").permitAll().and().cors().disable();
     }
 }
