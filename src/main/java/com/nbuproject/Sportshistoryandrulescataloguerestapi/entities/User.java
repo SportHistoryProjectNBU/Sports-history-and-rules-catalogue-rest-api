@@ -18,10 +18,11 @@ public class User implements UserDetails {
     private String name;
     private String email;
     private UserRole role;
+    private boolean isDisabled;
 
     @Id
     @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name="uuid", strategy = "uuid2")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
     public String getId() {
         return id;
     }
@@ -69,6 +70,14 @@ public class User implements UserDetails {
 
     public void setRole(UserRole role) {
         this.role = role;
+    }
+
+    public boolean isDisabled() {
+        return isDisabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+        isDisabled = disabled;
     }
 
     @Override

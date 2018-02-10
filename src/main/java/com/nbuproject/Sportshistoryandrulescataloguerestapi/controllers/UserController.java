@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +25,36 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+
+    @RequestMapping(path = "/setAdmin" , method = RequestMethod.POST)
+    public ResponseEntity setAdmin(@RequestBody String userId) {
+        User user = userRepository.findUserById(userId);
+        if(user.getRole().equals(UserRole.ADMIN)){
+            user.setRole(UserRole.USER);
+        }else {
+            user.setRole(UserRole.ADMIN);
+        }
+        userRepository.save(user);
+        return ResponseEntity.ok().build();
+    }
+
+    @RequestMapping(path = "/disableUser" , method = RequestMethod.POST)
+    public ResponseEntity disableUser(@RequestBody String userId) {
+        User user = userRepository.findUserById(userId);
+        if(user.isDisabled()) {
+            user.setDisabled(false);
+        }else {
+            user.setDisabled(true);
+        }
+        userRepository.save(user);
+        return ResponseEntity.ok().build();
+    }
+
+    @RequestMapping(path = "/all", method = RequestMethod.GET)
+    public ResponseEntity<Collection<User>> getAll() {
+        Collection<User> users = userRepository.findAll();
+        return  ResponseEntity.ok(users);
+    }
 
     @RequestMapping(path = "/register", method = RequestMethod.POST)
     public ResponseEntity<Map<String, String>> registerUser(@RequestBody User user) {
@@ -63,9 +94,32 @@ public class UserController {
             response.put("id", checkedUser.getId());
             response.put("name", checkedUser.getName());
             response.put("userName", checkedUser.getUsername());
+            response.put("admin", String.valueOf(checkedUser.getRole()));
+            if(checkedUser.isDisabled()) {
+                response.put("disabled", "true");
+                return ResponseEntity.ok(response);
+            }
             return ResponseEntity.ok(response);
         }
         response.put("authorization","failed");
         return ResponseEntity.badRequest().body(response);
     }
+
+    @RequestMapping(path = "/changeData", method = RequestMethod.POST)
+    public ResponseEntity changeUserData(@RequestBody User changeUserData) {
+        User user = userRepository.findUserById(changeUserData.getId());
+        if(changeUserData.getName() != null) {
+            user.setName(changeUserData.getName());
+        }
+        if(changeUserData.getEmail() != null) {
+            user.setEmail(changeUserData.getEmail());
+        }
+        if(changeUserData.getPassword() != null) {
+            String cryptedPassword = BCrypt.hashpw(changeUserData.getPassword(), BCrypt.gensalt());
+            user.setPassword(cryptedPassword);
+        }
+        userRepository.save(user);
+        return ResponseEntity.ok().build();
+    }
+
 }
