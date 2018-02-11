@@ -11,4 +11,5 @@ import java.util.ArrayList;
 public interface GameRepository extends PagingAndSortingRepository<Game, String> {
     ArrayList<Game> findAll();
     Game findGameById(String id);
+    ArrayList<Game> findAllByStatusOrStatus(String status1, String status2);
 }

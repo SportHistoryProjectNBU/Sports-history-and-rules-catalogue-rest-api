@@ -10,13 +10,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.xml.ws.Response;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
-/**
- * Created by user on 10/28/2017.
- */
+
 @RestController
 @CrossOrigin("*")
 @RequestMapping(path = "/games")
@@ -26,7 +27,7 @@ public class GameController {
     private GameRepository gameRepository;
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<String> insertGames(@RequestBody Fixture[] games) {
+    public ResponseEntity<String> insertGames(@RequestBody Fixture[] games) throws ParseException {
         for (Fixture game : games) {
             Game newGame = new Game();
             newGame.setDate(game.getDate());
@@ -49,6 +50,7 @@ public class GameController {
                         newGame.setGoalsAwayTeamSecondHalf(game.getResult().getHalfTime().getGoalsAwayTeam());
                     }
                 }
+
             }
             try{
 
@@ -56,6 +58,7 @@ public class GameController {
             }catch (DataIntegrityViolationException dive) {
 
             }
+
         }
         return ResponseEntity.ok("Created");
     }
@@ -63,6 +66,12 @@ public class GameController {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<ArrayList<Game>> getAllGames(){
         ArrayList<Game> games = gameRepository.findAll();
+        return ResponseEntity.ok(games);
+    }
+
+    @RequestMapping(path ="/incoming", method = RequestMethod.GET)
+    public ResponseEntity<ArrayList<Game>> getAllIncomnigGames(){
+        ArrayList<Game> games = gameRepository.findAllByStatusOrStatus("TIMED","SCHEDULED");
         return ResponseEntity.ok(games);
     }
 
